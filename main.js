@@ -25,8 +25,14 @@ const parser = (input) => {
 
         if (input[cursor + 1] === "/") {
         } else {
+          let name;
+          let isClose;
           if (input[idx - 1] === "/") {
+            name = input.substring(cursor + 1, idx - 1);
+            isClose = true;
           } else {
+            name = input.substring(cursor + 1, idx);
+            isClose = false;
           }
         }
       } else {
