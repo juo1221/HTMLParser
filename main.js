@@ -20,6 +20,15 @@ const parser = (input) => {
     while (i < j) {
       const cursor = i;
       if (input[cursor] === "<") {
+        const idx = input.indexOf(">", cursor);
+        i = idx + 1;
+
+        if (input[cursor + 1] === "/") {
+        } else {
+          if (input[idx - 1] === "/") {
+          } else {
+          }
+        }
       } else {
         i = textNode(input, cursor, curr);
       }
