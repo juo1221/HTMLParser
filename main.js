@@ -1,7 +1,7 @@
 "use strict";
 
 const textNode = (input, cursor, curr) => {
-  const idx = input.indexOf(">", cursor);
+  const idx = input.indexOf("<", cursor);
   curr.tag.children.push({
     type: "text",
     text: input.substring(cursor, idx),
@@ -35,21 +35,33 @@ const parser = (input) => {
   let curr;
   let i = 0;
   let j = input.length;
+
   while ((curr = stack.pop())) {
+    console.log(curr);
     while (i < j) {
       const cursor = i;
       if (input[cursor] === "<") {
         const idx = input.indexOf(">", cursor);
         i = idx + 1;
-
         if (input[cursor + 1] === "/") {
+          curr = curr.back;
         } else {
           if (elementNode(input, cursor, idx, curr, stack)) break;
         }
-      } else {
-        i = textNode(input, cursor, curr);
-      }
+      } else i = textNode(input, cursor, curr);
     }
-    return result;
   }
+  return result;
 };
+
+console.log(
+  parser(`
+  <div>
+    a
+    <a>b</a>
+    c
+    <img/>
+    d
+  </div>
+  `)
+);
