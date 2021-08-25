@@ -11,15 +11,12 @@ const textNode = (input, cursor, curr) => {
 
 const elementNode = (input, cursor, idx, curr, stack) => {
   let name;
-  let isClose;
-  if (input[idx - 1] === "/") {
-    name = input.substring(cursor + 1, idx - 1);
-    isClose = true;
-  } else {
-    name = input.substring(cursor + 1, idx);
-    isClose = false;
-  }
-  const tag = { name, type: "node", children: [] };
+  let isClose = input[idx - 1] === "/";
+  const tag = {
+    name: input.substring(cursor + 1, idx - (isClose ? 1 : 0)),
+    type: "node",
+    children: [],
+  };
   curr.tag.children.push(tag);
   if (!isClose) {
     stack.push({ tag, back: curr });
@@ -37,7 +34,6 @@ const parser = (input) => {
   let j = input.length;
 
   while ((curr = stack.pop())) {
-    console.log(curr);
     while (i < j) {
       const cursor = i;
       if (input[cursor] === "<") {
