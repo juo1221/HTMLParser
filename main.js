@@ -9,6 +9,25 @@ const textNode = (input, cursor, curr) => {
   return idx;
 };
 
+const elementNode = (input, cursor, idx, curr, stack) => {
+  let name;
+  let isClose;
+  if (input[idx - 1] === "/") {
+    name = input.substring(cursor + 1, idx - 1);
+    isClose = true;
+  } else {
+    name = input.substring(cursor + 1, idx);
+    isClose = false;
+  }
+  const tag = { name, type: "node", children: [] };
+  curr.tag.children.push(tag);
+  if (!isClose) {
+    stack.push({ tag, back: curr });
+    return true;
+  }
+  return false;
+};
+
 const parser = (input) => {
   input = input.trim();
   const result = { name: "ROOT", type: "node", children: [] };
@@ -25,15 +44,7 @@ const parser = (input) => {
 
         if (input[cursor + 1] === "/") {
         } else {
-          let name;
-          let isClose;
-          if (input[idx - 1] === "/") {
-            name = input.substring(cursor + 1, idx - 1);
-            isClose = true;
-          } else {
-            name = input.substring(cursor + 1, idx);
-            isClose = false;
-          }
+          if (elementNode(input, cursor, idx, curr, stack)) break;
         }
       } else {
         i = textNode(input, cursor, curr);
